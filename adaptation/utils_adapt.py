@@ -35,8 +35,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 # ----------------------------
 DESCRIPTOR_NAMES = [
     "MolWt", "MolLogP", "NumHDonors", "NumHAcceptors",
-    "TPSA", "NumRotatableBonds", "RingCount", "FractionCSP3",
-    "NumAromaticRings"
+    "TPSA", "NumRotatableBonds", "NOCount",
 ]
 
 
@@ -53,10 +52,7 @@ def compute_descriptors(smiles: str) -> Optional[List[float]]:
         vals.append(rdMolDescriptors.CalcNumHBA(mol))
         vals.append(rdMolDescriptors.CalcTPSA(mol))
         vals.append(Descriptors.NumRotatableBonds(mol))
-        vals.append(rdMolDescriptors.CalcNumRings(mol))
-        vals.append(Descriptors.FractionCSP3(mol))
-        vals.append(len([r for r in mol.GetRingInfo().AtomRings()
-                         if any(mol.GetAtomWithIdx(i).GetIsAromatic() for i in r)]))
+        vals.append(Descriptors.NOCount(mol))
         return vals
     except Exception:
         return None
